@@ -73,7 +73,7 @@ namespace Challenge.Valkimia.Presentation.Web.Controllers
                 ModelState.AddModelError("", "Fallo la creacion del cliente.");
             }
 
-            return View();
+            return View(vm);
         }
     }
 }

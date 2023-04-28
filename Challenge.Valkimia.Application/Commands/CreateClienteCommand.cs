@@ -37,20 +37,34 @@ namespace Challenge.Valkimia.Application.Commands
 
             public async Task<Result> Handle(CreateClienteCommand request, CancellationToken cancellationToken)
             {
-                var cliente = new Cliente(request.Apellido, request.Nombre, request.Email);
-                cliente.Domicilio = request.Domicilio;
-                cliente.Habilitado = request.Habilitado;
-                cliente.IdCiudadNavigation = await _ciudadRepository.GetFirstAsync(ciudad => ciudad.Id == Guid.Parse(request.CiudadID));
+                Result resultUserIdentity = null;
 
-                var resultUserIdentity = await _applicationUserService.CreateUser(cliente, request.Password, new List<string> { "User" }, true);
-            
-                if (resultUserIdentity.Failed)
-                    return new Result().Failed().WithError(resultUserIdentity.MessageWithErrors);
+                try
+                {
+                    var cliente = new Cliente(request.Apellido, request.Nombre, request.Email);
+                    cliente.Domicilio = request.Domicilio;
+                    cliente.Habilitado = request.Habilitado;
+                    cliente.IdCiudadNavigation = await _ciudadRepository.GetFirstAsync(ciudad => ciudad.Id == Guid.Parse(request.CiudadID));
+                    cliente.IdCiudad = Guid.Parse(request.CiudadID);
+                    cliente.Password = request.Password;
 
-                _clienteRepository.Add(cliente);
+                    resultUserIdentity = await _applicationUserService.CreateUser(cliente, request.Password, new List<string> { "User" }, true);
 
-                await _clienteRepository.UnitOfWork.SaveChangesAsync();
-                return new Result().Successful();
+                    if (resultUserIdentity.Failed)
+                        return new Result().Failed().WithError(resultUserIdentity.MessageWithErrors);
+
+                    _clienteRepository.Add(cliente);
+                    await _clienteRepository.UnitOfWork.SaveChangesAsync();
+
+                    return new Result().Successful();
+                }
+                catch (Exception ex)
+                {
+                    if (resultUserIdentity is null || resultUserIdentity.Failed)
+                        await _applicationUserService.DeactivateUser(request.Email);
+
+                    return new Result().Failed().WithError(ex.Message);
+                }
 
             }
         }
