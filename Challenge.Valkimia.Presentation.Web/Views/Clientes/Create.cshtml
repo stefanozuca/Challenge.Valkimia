@@ -1,0 +1,87 @@
+﻿@model CreateClienteViewModel
+@{
+    ViewBag.Title = "Nuevo cliente";
+    ViewBag.pTitle = "Nuevo cliente";
+    ViewBag.pageTitle = "Clientes";
+}
+<partial name="_CrudCss" />
+
+<div class="row">
+    <div class="col-lg-12">
+        <div class="card">
+            <div class="card-body">
+                <form asp-controller="Clientes" asp-action="Create" method="post">
+                    <div class="form-group row mb-4">
+                        <label asp-for="Nombre" class="col-form-label col-lg-2"></label>
+                        <div class="col-lg-10">
+                            <input asp-for="Nombre" class="form-control">
+                            <span asp-validation-for="Nombre"></span>
+                        </div>
+                    </div>
+                    <div class="form-group row mb-4">
+                        <label asp-for="Apellido" class="col-form-label col-lg-2"></label>
+                        <div class="col-lg-10">
+                            <input asp-for="Apellido" class="form-control">
+                            <span asp-validation-for="Apellido"></span>
+                        </div>
+                    </div>
+                    <div class="form-group row mb-4">
+                        <label asp-for="Email" class="col-form-label col-lg-2"></label>
+                        <div class="col-lg-10">
+                            <input asp-for="Email" class="form-control">
+                            <span asp-validation-for="Email"></span>
+                        </div>
+                    </div>
+
+                    <div class="form-group row mb-4">
+                        <label asp-for="Password" class="col-form-label col-lg-2"></label>
+                        <div class="col-lg-10">
+                            <input asp-for="Password" class="form-control"> 
+                            <span asp-validation-for="Password"></span>
+                        </div>
+                    </div>
+
+                    <div class="form-group row mb-4">
+                        <label asp-for="Domicilio" class="col-form-label col-lg-2"></label>
+                        <div class="col-lg-10">
+                            <input asp-for="Domicilio" class="form-control">
+                            <span asp-validation-for="Domicilio"></span>
+                        </div>
+                    </div>
+
+                    <div class="form-group row mb-4">
+                        <label asp-for="CiudadID" class="col-form-label col-lg-2"></label>
+                        <div class="col-lg-10">
+                            <select asp-for="CiudadID" asp-items="ViewBag.CiudadID" class="form-control select2" data-placeholder="Elegir">
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group row mb-4">
+                        <label asp-for="Habilitado" class="col-form-label col-lg-2"></label>
+                        <div class="col-lg-10">
+                            <input type="checkbox" asp-for="Habilitado" class="form-control">
+                            <span asp-validation-for="Habilitado"></span>
+                        </div>
+                    </div>
+
+
+                    <div class="row justify-content-end">
+                        <div class="col-lg-10">
+                            <button type="submit" class="btn btn-primary">Crear cliente</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts
+{
+    <script src="~/assets/libs/select2/js/select2.min.js"></script>
+    <partial name="_ValidationScriptsPartial" />
+    <partial name="_CrudJS" />
+}
+
+
